@@ -43,5 +43,6 @@ class Multispectral:
     
         return bai
     
-    def calculate_savi(self, red_image_name, nir_image_name)
+    def calculate_savi(self, red_image_name, nir_image_name):
+        return 0
         
