@@ -7,7 +7,11 @@ class Multispectral_Processor:
         
         loaded_image = rasterio.open(file_name)        
         return loaded_image.read(1).astype('float64')
+    
+    def __normalize__(self, vi_array):
 
+        normalized = (vi_array-np.min(vi_array))/(np.max(vi_array)-np.min(vi_array))
+        return normalized
 
     def ndvi(self, red_image_name, nir_image_name):
 
@@ -17,8 +21,10 @@ class Multispectral_Processor:
         ndvi = np.where((nir + red) == 0., 
                         0, (nir - red) / 
                         (nir + red))
+                        
+        normalized_ndvi = self.__normalize__(ndvi)
 
-        return ndvi
+        return  normalized_ndvi
 
 
     def gndvi(self, nir_image_name, green_image_name):
@@ -29,8 +35,10 @@ class Multispectral_Processor:
         gndvi = np.where((nir + green) == 0., 0, 
                          (nir - green) / 
                          (nir + green))
+        
+        normalized_gndvi = self.__normalize__(gndvi)
 
-        return gndvi
+        return normalized_gndvi
     
 
     def bai(self, red_image_name, nir_image_name):
@@ -40,21 +48,25 @@ class Multispectral_Processor:
 
         bai = 1 /( (np.power((0.1 - red), 2)) 
                   + np.power((0.06 - nir), 2) )
+        
+        normalized_bai = self.__normalize__(bai)
+
+        return normalized_bai
     
-        return bai
     
-    def savi(self, red_image_name, nir_image_name):
+    def savi(self, red_image_name, nir_image_name, tuning_param_l = 0.5):
         
         red = self.__load_image_to_array__(red_image_name)
-        nir = self.__load_image_to_array__(nir_image_name)
-
-        tuning_param_l = 0.5
+        nir = self.__load_image_to_array__(nir_image_name)        
 
         savi = (((nir - red) / 
                 (nir + red + tuning_param_l))*
                 (1 + tuning_param_l))
         
-        return savi
+        normalized_savi = self.__normalize__(savi)
+
+        return normalized_savi
+    
     
     def cig(self, nir_image_name, green_image_name):
 
@@ -63,7 +75,9 @@ class Multispectral_Processor:
 
         CIg = (nir / green) - 1
 
-        return CIg
+        normalized_cig = self.__normalize__(CIg)
+        return normalized_cig
+    
     
     def cire(self, nir_image_name, red_e_image_name):
 
@@ -72,7 +86,9 @@ class Multispectral_Processor:
 
         CIre = (nir / red_e) - 1
 
-        return CIre
+        normalized_cire = self.__normalize__(CIre)
+        return normalized_cire
+    
     
     def gemi(self, nir_image_name, red_image_name):
 
@@ -88,7 +104,10 @@ class Multispectral_Processor:
         gemi = (theta * (1 - 0.25 * theta) - ((red - 0.125)) /
                 (1-red))
         
-        return gemi
+        normalized_gemi = self.__normalize__(gemi)
+        
+        return normalized_gemi
+    
     
     def msavi2(self, nir_image_name, red_image_name):
 
@@ -99,7 +118,9 @@ class Multispectral_Processor:
                     - (np.sqrt(np.power((2*nir + 1), 2)))
                     - 8*(nir - red))
         
-        return msavi2
+        normalized_msavi2 = self.__normalize__(msavi2)
+        return normalized_msavi2
+    
     
     def mtvi2(self, red_image_name, green_image_name, nir_image_name):
         
@@ -110,8 +131,10 @@ class Multispectral_Processor:
         mtvi2 = (1.5 * (1.2 * (nir - green) - 2.5* (red - green)) * 
                  np.sqrt(np.power((2 * nir + 1), 2) - 
                          (6 * nir - 5 * np.sqrt(red)) - 0.5))
+        
+        normalized_mtvi2 = self.__normalize__(mtvi2)
 
-        return mtvi2
+        return normalized_mtvi2
     
 
     def ndre(self, nir_image_name, red_e_image_name):
@@ -122,7 +145,9 @@ class Multispectral_Processor:
         ndre = np.where((nir + red_e) == 0, 0,
                         (nir - red_e) / (nir + red_e))
         
-        return ndre
+        normalized_ndre = self.__normalize__(ndre)
+
+        return normalized_ndre
     
     def ndwi(self, green_image_name, nir_image_name):
 
@@ -132,7 +157,8 @@ class Multispectral_Processor:
         ndwi =  np.where((green + nir) == 0, 0,
                 (green - nir) / (green + nir))
         
-        return ndwi
+        normalized_ndwi = self.__normalize__(ndwi)
+        return normalized_ndwi
     
 
     def srre(self, nir_image_name, red_e_image_name):
@@ -142,7 +168,9 @@ class Multispectral_Processor:
 
         srre = nir / red_e
 
-        return srre
+        normalized_srre = self.__normalize__(srre)
+
+        return normalized_srre
     
 
     def rtvi_core(self, nir_image_name, green_image_name):
@@ -153,7 +181,9 @@ class Multispectral_Processor:
         rtvi = np.where((green + nir) == 0, 0,
                 (green - nir) / (green + nir))
         
-        return rtvi
+        normalized_rtvi = self.__normalize__(rtvi)
+        
+        return normalized_rtvi
 
 
 
