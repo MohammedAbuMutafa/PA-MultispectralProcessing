@@ -13,6 +13,7 @@ class Multispectral_Processor:
         normalized = (vi_array-np.min(vi_array))/(np.max(vi_array)-np.min(vi_array))
         return normalized
 
+
     def ndvi(self, red_image_name, nir_image_name):
 
         nir = self.__load_image_to_array__(nir_image_name)

@@ -2,6 +2,7 @@ from Modules.Multispectral import Multispectral_Processor
 import os
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
+from tifffile import imwrite
 
 class Playground():
 
@@ -24,26 +25,21 @@ class Playground():
 
     def __init_output_paths__(self):
         
-        output_base = os.getenv('OUTPUT_BASE_PATH')
+        self.output_base = os.getenv('OUTPUT_BASE_PATH')
 
-        if (os.path.exists(output_base) != True):
-            os.mkdir(output_base)
+        if (os.path.exists(self.output_base) != True):
+            os.mkdir(self.output_base)
         
-    def plotResult(self, img):
+    def plotResult(self, img, save=False):
+        fig = plt.figure()
         plt.imshow(img, cmap=('RdYlGn'))
         plt.colorbar()
         plt.show()    
 
+        if (save):
+            file_name = os.path.join(self.output_base, "test.png")
+            fig.savefig(file_name, bbox_inches='tight')
 
-main = Playground()
-multispectral_processor = Multispectral_Processor()
-
-fileBase = f"Image_001.jpg"
-red_image = os.path.join(main.redDirectory, fileBase)
-nir_image = os.path.join(main.nirDirectory, fileBase)
-
-ndvi = multispectral_processor.ndvi(red_image, nir_image)
-main.plotResult(ndvi)
 
 
 
