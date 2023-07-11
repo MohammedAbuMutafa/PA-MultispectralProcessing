@@ -5,3 +5,4 @@ python-dotenv
 tifffile
 pika
 pyfiglet
+flask

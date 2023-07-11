@@ -2,13 +2,14 @@ import sys
 import os
 import logging
 import datetime
-from Modules.MessageReciever import MessageReciever    
 from pyfiglet import Figlet
+from Processors.NewImageProcessor import NewImageProcessor
 
 version = '0.0.1'
 
+
 def init_logger():
-    
+
     FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     formatter = logging.Formatter(FORMAT)
 
@@ -18,11 +19,13 @@ def init_logger():
     if not os.path.isdir('logs'):
         os.mkdir("logs")
 
-    file = logging.FileHandler(filename ='logs/'+log_file_name)
+    file = logging.FileHandler(filename='logs/'+log_file_name)
     file.setFormatter(formatter)
     logging.basicConfig(level=logging.DEBUG, format=FORMAT)
     log = logging.getLogger()
     log.addHandler(file)
+    log.setLevel(level=logging.DEBUG)
+
 
 def startup_splash():
 
@@ -31,15 +34,17 @@ def startup_splash():
     print(f"Version: {version}")
     print("-------------------------------------------------------")
 
+
 def main():
-    
-    startup_splash()    
+
+    startup_splash()
     init_logger()
-    messageReciever = MessageReciever()
-    messageReciever.start()
+
+    _ = NewImageProcessor()
+
 
 if __name__ == '__main__':
-    try:        
+    try:
         main()
     except KeyboardInterrupt:
         print("Exiting, keyboard interupt")
