@@ -20,8 +20,17 @@ class MessageReceiver():
         self.logger.setLevel(logging.DEBUG)
 
     def start(self, callback):
-        self.channel.basic_consume(
-            queue=os.getenv('RMQ_INCOMING_NAME'), on_message_callback=callback, auto_ack=True)
+        retry = 0
+        max_retry = 10
+        while (retry < max_retry):
+            try:
+                self.channel.basic_consume(
+                    queue=os.getenv('RMQ_INCOMING_NAME'), on_message_callback=callback, auto_ack=True)
 
-        self.logger.info('Listening for messages')
-        self.channel.start_consuming()
+                self.logger.info('Listening for messages')
+                self.channel.start_consuming()
+                break
+            except Exception:
+                retry += 1
+                self.logger.info(
+                    f"Unable to connect to message broker, retrying... {retry}")
