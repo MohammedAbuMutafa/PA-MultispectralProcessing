@@ -15,7 +15,7 @@ class NewImageProcessor():
         self.multispectral = Multispectral()
 
         self.message_receiver = MessageReceiver()
-        self.message_sender = MessageSender()
+        # self.message_sender = MessageSender()
         self.message_receiver.start(self.handle_new_message)
 
     def __init_logger__(self):

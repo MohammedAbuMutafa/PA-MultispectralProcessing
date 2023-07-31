@@ -53,4 +53,4 @@ if __name__ == '__main__':
         except SystemExit:
             os._exit(0)
     except Exception:
-        logging.ERROR(Exception)
+        logging.error(f"Unhandled exception: {Exception}")
