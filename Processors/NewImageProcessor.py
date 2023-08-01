@@ -10,13 +10,9 @@ import matplotlib.pyplot as plt
 class NewImageProcessor():
 
     def __init__(self):
-
         self.__init_logger__()
         self.multispectral = Multispectral()
-
-        self.message_receiver = MessageReceiver()
-        # self.message_sender = MessageSender()
-        self.message_receiver.start(self.handle_new_message)
+        self.message_receiver = MessageReceiver(self.handle_new_message)
 
     def __init_logger__(self):
         logging.getLogger("matplotlib").setLevel(logging.WARNING)
@@ -25,7 +21,6 @@ class NewImageProcessor():
         self.logger.setLevel(logging.DEBUG)
 
     def handle_new_message(self, ch, method, properties, body):
-
         body_json = json.loads(body.decode())
         message = IncomingMessageDTO(
             fileName=body_json['fileName'], DateTimeProcessed=body_json['DateTimeProcessed'])

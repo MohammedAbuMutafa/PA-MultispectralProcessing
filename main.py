@@ -4,8 +4,7 @@ import logging
 import datetime
 from pyfiglet import Figlet
 from Processors.NewImageProcessor import NewImageProcessor
-
-version = '0.0.1'
+from dotenv import load_dotenv
 
 
 def init_logger():
@@ -31,12 +30,12 @@ def startup_splash():
 
     f = Figlet(font='slant')
     print(f.renderText('Processing Service'))
-    print(f"Version: {version}")
+    print(f"Version: {os.getenv('VERSION')}")
     print("-------------------------------------------------------")
 
 
 def main():
-
+    load_dotenv()
     startup_splash()
     init_logger()
 
@@ -52,5 +51,7 @@ if __name__ == '__main__':
             sys.exit(0)
         except SystemExit:
             os._exit(0)
-    except Exception:
-        logging.error(f"Unhandled exception: {Exception}")
+    except ConnectionError as e:
+        logging.error(f"Connection issue: {e}")
+    except Exception as e:
+        logging.error(f"Unhandled exception: {e}")

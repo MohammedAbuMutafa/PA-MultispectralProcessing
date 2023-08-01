@@ -8,8 +8,6 @@ from tifffile import imwrite
 class Playground():
 
     def __init__(self):
-
-        load_dotenv()
         self.__init_paths__()
 
     def __init_paths__(self):

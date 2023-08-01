@@ -1,17 +1,17 @@
 import pika
 import logging
-from dotenv import load_dotenv
 import os
 
 
 class MessageReceiver():
 
-    def __init__(self):
-        self.__init_logger__()
-        load_dotenv()
+    def __init__(self, callback):
+        self.__init_logger__()        
         connection_result = self.__connect__()
-        if (connection_result == False):
-            raise ConnectionError("Unable to connect to messaging queue")
+        if (connection_result == True):
+            self.start(callback=callback)
+
+        raise ConnectionError("Unable to connect to messaging queue")
 
     def __init_logger__(self):
         logging.getLogger("pika").setLevel(logging.FATAL)
@@ -36,7 +36,7 @@ class MessageReceiver():
 
             except Exception:
                 retry += 1
-                self.logger.info(
+                self.logger.warn(
                     f"Unable to connect to message broker, retrying... {retry}")
 
     def start(self, callback):
@@ -46,6 +46,5 @@ class MessageReceiver():
             self.logger.info('Listening for messages')
             self.channel.start_consuming()
         except Exception:
-            retry += 1
-            self.logger.info(
+            self.logger.fatal(
                 f"Message broker lost, unable to communicate")

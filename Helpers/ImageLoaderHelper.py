@@ -1,5 +1,4 @@
 import os
-import dotenv
 import rasterio
 from Enums.ImageTypeEnum import ImageType
 import logging
@@ -8,7 +7,6 @@ import logging
 class ImageLoaderHelper():
 
     def __init__(self):
-        dotenv.load_dotenv()
         self.__init_directories__()
         logging.getLogger("rasterio").setLevel(logging.WARNING)
 

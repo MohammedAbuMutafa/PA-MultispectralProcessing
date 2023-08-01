@@ -1,6 +1,4 @@
 import numpy as np
-import os
-import dotenv
 from Helpers.ImageLoaderHelper import ImageLoaderHelper
 from Enums.ImageTypeEnum import ImageType
 
@@ -8,7 +6,6 @@ from Enums.ImageTypeEnum import ImageType
 class Multispectral:
 
     def __init__(self):
-        dotenv.load_dotenv()
         self.image_loader = ImageLoaderHelper()
 
     def __normalize__(self, vi_array):
