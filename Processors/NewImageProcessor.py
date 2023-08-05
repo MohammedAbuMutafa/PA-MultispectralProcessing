@@ -1,6 +1,5 @@
 from Modules.VegetationIndex.Multispectral import Multispectral
 from Modules.Messaging.MessageReceiver import MessageReceiver
-from Modules.Messaging.MessageSender import MessageSender
 from dto.IncomingMessageDTO import IncomingMessageDTO
 import logging
 import json
@@ -23,7 +22,9 @@ class NewImageProcessor():
     def handle_new_message(self, ch, method, properties, body):
         body_json = json.loads(body.decode())
         message = IncomingMessageDTO(
-            fileName=body_json['fileName'], DateTimeProcessed=body_json['DateTimeProcessed'])
+            fileName=body_json['fileName'], 
+            DateTimeProcessed=body_json['DateTimeProcessed'])
+        
         self.logger.info(f"[x] New file recieved: {message.fileName}")
 
         self.process_message(message)

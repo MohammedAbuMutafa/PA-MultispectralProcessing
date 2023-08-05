@@ -9,7 +9,7 @@ class MessageReceiver():
         self.__init_logger__()        
         connection_result = self.__connect__()
         if (connection_result == True):
-            self.start(callback=callback)
+            self.__start__(callback=callback)
 
         raise ConnectionError("Unable to connect to messaging queue")
 
@@ -39,7 +39,7 @@ class MessageReceiver():
                 self.logger.warn(
                     f"Unable to connect to message broker, retrying... {retry}")
 
-    def start(self, callback):
+    def __start__(self, callback):
         try:
             self.channel.basic_consume(
                 queue=os.getenv('RMQ_INCOMING_NAME'), on_message_callback=callback, auto_ack=True)

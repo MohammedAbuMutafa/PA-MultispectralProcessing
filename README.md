@@ -3,6 +3,8 @@
 ## Environment setup
 
 ```
+
+VERSION=
 DATA_BASE_PATH=
 
 GREEN_DIR =
