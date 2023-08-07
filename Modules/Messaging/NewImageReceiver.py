@@ -3,10 +3,10 @@ import logging
 import os
 
 
-class MessageReceiver():
+class NewImageReceiver():
 
     def __init__(self, callback):
-        self.__init_logger__()        
+        self.__init_logger__()
         connection_result = self.__connect__()
         if (connection_result == True):
             self.__start__(callback=callback)
@@ -18,19 +18,22 @@ class MessageReceiver():
         self.logger = logging.getLogger('Main.Message_Receiver')
         self.logger.setLevel(logging.DEBUG)
 
+    def __init_connection__(self):
+        connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host=os.getenv('RMQ_HOST')))
+        self.channel = connection.channel()
+        self.channel.queue_declare(
+            queue=os.getenv('RMQ_INCOMING_NAME'))
+
     def __connect__(self):
         retry = 0
         max_retry = 5
-        while (retry < max_retry):
+        while (True):
             try:
                 if (retry == max_retry):
                     return False
 
-                connection = pika.BlockingConnection(
-                    pika.ConnectionParameters(host=os.getenv('RMQ_HOST')))
-                self.channel = connection.channel()
-                self.channel.queue_declare(
-                    queue=os.getenv('RMQ_INCOMING_NAME'))
+                self.__init_connection__()
 
                 return True
 
