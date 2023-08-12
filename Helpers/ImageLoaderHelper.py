@@ -11,7 +11,7 @@ class ImageLoaderHelper():
         logging.getLogger("rasterio").setLevel(logging.WARNING)
 
     def __init_directories__(self):
-        self.base_path = os.getenv('DATA_BASE_PATH')
+        self.base_path = os.getenv('DATA_DIR')
         self.green_dir = os.getenv('GREEN_DIR')
         self.nir_dir = os.getenv('NIR_DIR')
         self.red_dir = os.getenv('RED_DIR')

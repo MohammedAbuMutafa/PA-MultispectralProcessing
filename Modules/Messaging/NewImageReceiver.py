@@ -48,6 +48,6 @@ class NewImageReceiver():
                 queue=os.getenv('RMQ_INCOMING_NAME'), on_message_callback=callback, auto_ack=True)
             self.logger.info('Listening for messages')
             self.channel.start_consuming()
-        except Exception:
+        except ConnectionError:
             self.logger.fatal(
                 f"Message broker lost, unable to communicate")
