@@ -4,6 +4,7 @@ from dto.IncomingMessageDTO import IncomingMessageDTO
 import logging
 import json
 import matplotlib.pyplot as plt
+from Exceptions.ImageDtoMapException import ImageDtoMapException
 
 
 class NewImageProcessor():
@@ -30,7 +31,7 @@ class NewImageProcessor():
                 dt_processed=body_json['dt_processed'],
             )
         except Exception:
-            raise ValueError("Unable to map incoming image")
+            raise ImageDtoMapException("Unable to map incoming image")
 
         self.logger.info(
             f"[x] New Image: filename: {message.fileName} \nid: {message.id}")

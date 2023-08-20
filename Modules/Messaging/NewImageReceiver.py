@@ -9,6 +9,7 @@ class NewImageReceiver():
         self.__init_logger__()
         connection_result = self.__connect__()
         if (connection_result == True):
+            self.logger.info("Connected to message broker successfully")
             self.__start__(callback=callback)
 
         raise ConnectionError("Unable to connect to messaging queue")

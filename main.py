@@ -5,6 +5,7 @@ import datetime
 from pyfiglet import Figlet
 from Processors.NewImageProcessor import NewImageProcessor
 from dotenv import load_dotenv
+from Exceptions.ImageDtoMapException import ImageDtoMapException
 
 
 def init_logger():
@@ -13,7 +14,7 @@ def init_logger():
     formatter = logging.Formatter(FORMAT)
 
     date = datetime.datetime.now()
-    t = date.strftime("%Y%d%m%H%M%S")
+    t = date.strftime("%d-%m-%Y--%H-%M-%S")
     log_file_name = f"log-"+t+".log"
     if not os.path.isdir('logs'):
         os.mkdir("logs")
@@ -53,5 +54,7 @@ if __name__ == '__main__':
             os._exit(0)
     except ConnectionError as e:
         logging.error(f"Connection issue: {e}")
+    except ImageDtoMapException as e:
+        logging.error(f"Image dto issue: {e}")
     except Exception as e:
         logging.error(f"Unhandled exception: {e}")

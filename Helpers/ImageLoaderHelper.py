@@ -3,27 +3,33 @@ import rasterio
 from Enums.ImageTypeEnum import ImageType
 import logging
 
+from Modules.DirectoryManager.DirectoryManager import DirectoryManager
+
 
 class ImageLoaderHelper():
 
     def __init__(self):
-        self.__init_directories__()
+        self.logger = logging.getLogger(__name__)
         logging.getLogger("rasterio").setLevel(logging.WARNING)
+        self.directory_manager = DirectoryManager()
+        self.__init_directories__()
 
     def __init_directories__(self):
-        self.base_path = os.getenv('DATA_DIR')
-        self.green_dir = os.getenv('GREEN_DIR')
-        self.nir_dir = os.getenv('NIR_DIR')
-        self.red_dir = os.getenv('RED_DIR')
-        self.red_e_dir = os.getenv('RED_EDGE_DIR')
+        input_directories = self.directory_manager.get_input_dirs()
+
+        self.green_dir = input_directories['GREEN']
+        self.nir_dir = input_directories['NIR']
+        self.red_dir = input_directories['RED']
+        self.red_e_dir = input_directories['RED_EDGE']
 
     def load(self, file_name: str, image_type: ImageType):
 
         try:
-            file = os.path.join(
-                self.base_path, self.__get_image_type__(image_type), file_name)
+            file = os.path.join(self.__get_image_type__(image_type), file_name)
             image = rasterio.open(file)
             return image.read(1).astype('float64')
+        except ValueError as e:
+            self.logger.error(e)
         except Exception:
             raise ValueError("Unable to load file")
 
