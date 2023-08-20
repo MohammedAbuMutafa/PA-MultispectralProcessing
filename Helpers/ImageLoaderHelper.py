@@ -1,7 +1,8 @@
 import os
-import rasterio
 from Enums.ImageTypeEnum import ImageType
 import logging
+from PIL import Image
+import numpy as np
 
 from Modules.DirectoryManager import DirectoryManager
 
@@ -10,7 +11,8 @@ class ImageLoaderHelper():
 
     def __init__(self):
         self.logger = logging.getLogger(__name__)
-        logging.getLogger("rasterio").setLevel(logging.FATAL)
+        logging.getLogger("rasterio").setLevel(logging.CRITICAL + 10)
+        logging.getLogger("rasterio").propagate = False
         self.directory_manager = DirectoryManager()
         self.__init_directories__()
 
@@ -26,8 +28,8 @@ class ImageLoaderHelper():
 
         try:
             file = os.path.join(self.__get_image_type__(image_type), file_name)
-            image = rasterio.open(file)
-            return image.read(1).astype('float64')
+            image = Image.open(file)
+            return np.array(image).astype('float64')
         except ValueError as e:
             self.logger.error(e)
         except Exception:

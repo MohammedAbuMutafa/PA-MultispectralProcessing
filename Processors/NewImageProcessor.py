@@ -47,7 +47,7 @@ class NewImageProcessor():
     def process_message(self, new_image: IncomingMessageDTO):
         for multispectral_index in MultiSpectralEnum:
             self.logger.info(
-                f"Processing image in {multispectral_index.name} index")
+                f"Processing {new_image.fileName} in {multispectral_index.name} index")
             image = self.multispectral.process(
                 new_image.fileName, multispectral_index)
             self.save_image(image, new_image,
@@ -65,3 +65,4 @@ class NewImageProcessor():
         file = os.path.join(output_dir, processing_type.name,
                             image_details.fileName)
         fig.savefig(file)
+        plt.close(fig)
