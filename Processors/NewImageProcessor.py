@@ -1,17 +1,23 @@
-from Modules.VegetationIndex.Multispectral import Multispectral
+from Modules.VegetationIndex.MultispectralFactory import MultispectralFactory
 from Modules.Messaging.NewImageReceiver import NewImageReceiver
 from dto.IncomingMessageDTO import IncomingMessageDTO
 import logging
 import json
 import matplotlib.pyplot as plt
+from PIL import Image
 from Exceptions.ImageDtoMapException import ImageDtoMapException
+from Modules.DirectoryManager import DirectoryManager
+from Enums.MultiSpectralEnum import MultiSpectralEnum
+import os
 
 
 class NewImageProcessor():
 
     def __init__(self):
         self.__init_logger__()
-        self.multispectral = Multispectral()
+        self.directory_manager = DirectoryManager()
+        self.directory_manager.create_session_dirs()
+        self.multispectral = MultispectralFactory()
         self.message_receiver = NewImageReceiver(
             self.handle_new_message)
 
@@ -39,12 +45,23 @@ class NewImageProcessor():
         self.process_message(message)
 
     def process_message(self, new_image: IncomingMessageDTO):
-        ndvi = self.multispectral.ndvi(new_image.fileName)
-        self.plotResult(ndvi)
-        return
+        for multispectral_index in MultiSpectralEnum:
+            self.logger.info(
+                f"Processing image in {multispectral_index.name} index")
+            image = self.multispectral.process(
+                new_image.fileName, multispectral_index)
+            self.save_image(image, new_image,
+                            processing_type=multispectral_index)
 
-    def plotResult(self, img, save=False):
-        fig = plt.figure()
+    def save_image(self, img, image_details: IncomingMessageDTO, processing_type: MultiSpectralEnum, use_color_bar=False):
+        fig = plt.figure(frameon=False)
+        ax = plt.Axes(fig, [0., 0., 1., 1.])
+        ax.set_axis_off()
+        fig.add_axes(ax)
         plt.imshow(img, cmap=('RdYlGn'))
-        plt.colorbar()
-        plt.show()
+        if (use_color_bar):
+            plt.colorbar()
+        output_dir = self.directory_manager.processed_dir
+        file = os.path.join(output_dir, processing_type.name,
+                            image_details.fileName)
+        fig.savefig(file)

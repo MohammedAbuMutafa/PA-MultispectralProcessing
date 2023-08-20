@@ -1,6 +1,7 @@
 import numpy as np
 from Helpers.ImageLoaderHelper import ImageLoaderHelper
 from Enums.ImageTypeEnum import ImageType
+from Enums.MultiSpectralEnum import MultiSpectralEnum
 
 
 class Multispectral:
@@ -14,10 +15,10 @@ class Multispectral:
             (np.max(vi_array)-np.min(vi_array))
         return normalized
 
-    def ndvi(self, fileName: str):
+    def ndvi(self, filename: str):
 
-        nir = self.image_loader.load(fileName, ImageType.nir)
-        red = self.image_loader.load(fileName, ImageType.red)
+        nir = self.image_loader.load(filename, ImageType.nir)
+        red = self.image_loader.load(filename, ImageType.red)
 
         ndvi = np.where((nir + red) == 0.,
                         0, (nir - red) /
@@ -27,10 +28,10 @@ class Multispectral:
 
         return normalized_ndvi
 
-    def gndvi(self, fileName):
+    def gndvi(self, filename):
 
-        green = self.image_loader.load(fileName, ImageType.green)
-        nir = self.image_loader.load(fileName, ImageType.nir)
+        green = self.image_loader.load(filename, ImageType.green)
+        nir = self.image_loader.load(filename, ImageType.nir)
 
         gndvi = np.where((nir + green) == 0., 0,
                          (nir - green) /
@@ -40,10 +41,10 @@ class Multispectral:
 
         return normalized_gndvi
 
-    def bai(self, red_image_name, nir_image_name):
+    def bai(self, filename):
 
-        red = self.__load_image_to_array__(red_image_name)
-        nir = self.__load_image_to_array__(nir_image_name)
+        red = self.image_loader.load(filename, ImageType.red)
+        nir = self.image_loader.load(filename, ImageType.nir)
 
         bai = 1 / ((np.power((0.1 - red), 2))
                    + np.power((0.06 - nir), 2))
@@ -52,10 +53,10 @@ class Multispectral:
 
         return normalized_bai
 
-    def savi(self, red_image_name, nir_image_name, tuning_param_l=0.5):
+    def savi(self, filename, tuning_param_l=0.5):
 
-        red = self.__load_image_to_array__(red_image_name)
-        nir = self.__load_image_to_array__(nir_image_name)
+        red = self.image_loader.load(filename, ImageType.red)
+        nir = self.image_loader.load(filename, ImageType.nir)
 
         savi = (((nir - red) /
                 (nir + red + tuning_param_l)) *
@@ -65,30 +66,30 @@ class Multispectral:
 
         return normalized_savi
 
-    def cig(self, nir_image_name, green_image_name):
+    def cig(self, filename):
 
-        nir = self.__load_image_to_array__(nir_image_name)
-        green = self.__load_image_to_array__(green_image_name)
+        nir = self.image_loader.load(filename, ImageType.nir)
+        green = self.image_loader.load(filename, ImageType.green)
 
         CIg = (nir / green) - 1
 
         normalized_cig = self.__normalize__(CIg)
         return normalized_cig
 
-    def cire(self, nir_image_name, red_e_image_name):
+    def cire(self, filename):
 
-        nir = self.__load_image_to_array__(nir_image_name)
-        red_e = self.__load_image_to_array__(red_e_image_name)
+        nir = self.image_loader.load(filename, ImageType.nir)
+        red_e = self.image_loader.load(filename, ImageType.red_edge)
 
         CIre = (nir / red_e) - 1
 
         normalized_cire = self.__normalize__(CIre)
         return normalized_cire
 
-    def gemi(self, nir_image_name, red_image_name):
+    def gemi(self, filename):
 
-        nir = self.__load_image_to_array__(nir_image_name)
-        red = self.__load_image_to_array__(red_image_name)
+        nir = self.image_loader.load(filename, ImageType.nir)
+        red = self.image_loader.load(filename, ImageType.red)
 
         nir_squared = np.power(nir, 2)
         red_squared = np.power(red, 2)
@@ -103,10 +104,10 @@ class Multispectral:
 
         return normalized_gemi
 
-    def msavi2(self, nir_image_name, red_image_name):
+    def msavi2(self, filename):
 
-        nir = self.__load_image_to_array__(nir_image_name)
-        red = self.__load_image_to_array__(red_image_name)
+        nir = self.image_loader.load(filename, ImageType.nir)
+        red = self.image_loader.load(filename, ImageType.red)
 
         msavi2 = ((0.5 * (2 * (nir + 1)))
                   - (np.sqrt(np.power((2*nir + 1), 2)))
@@ -115,11 +116,11 @@ class Multispectral:
         normalized_msavi2 = self.__normalize__(msavi2)
         return normalized_msavi2
 
-    def mtvi2(self, red_image_name, green_image_name, nir_image_name):
+    def mtvi2(self, filename):
 
-        red = self.__load_image_to_array__(red_image_name)
-        green = self.__load_image_to_array__(green_image_name)
-        nir = self.__load_image_to_array__(nir_image_name)
+        red = self.image_loader.load(filename, ImageType.red)
+        green = self.image_loader.load(filename, ImageType.green)
+        nir = self.image_loader.load(filename, ImageType.nir)
 
         mtvi2 = (1.5 * (1.2 * (nir - green) - 2.5 * (red - green)) *
                  np.sqrt(np.power((2 * nir + 1), 2) -
@@ -129,10 +130,10 @@ class Multispectral:
 
         return normalized_mtvi2
 
-    def ndre(self, nir_image_name, red_e_image_name):
+    def ndre(self, filename):
 
-        nir = self.__load_image_to_array__(nir_image_name)
-        red_e = self.__load_image_to_array__(red_e_image_name)
+        nir = self.image_loader.load(filename, ImageType.nir)
+        red_e = self.image_loader.load(filename, ImageType.red_edge)
 
         ndre = np.where((nir + red_e) == 0, 0,
                         (nir - red_e) / (nir + red_e))
@@ -141,10 +142,10 @@ class Multispectral:
 
         return normalized_ndre
 
-    def ndwi(self, green_image_name, nir_image_name):
+    def ndwi(self, filename):
 
-        green = self.__load_image_to_array__(green_image_name)
-        nir = self.__load_image_to_array__(nir_image_name)
+        green = self.image_loader.load(filename, ImageType.green)
+        nir = self.image_loader.load(filename, ImageType.nir)
 
         ndwi = np.where((green + nir) == 0, 0,
                         (green - nir) / (green + nir))
@@ -152,10 +153,10 @@ class Multispectral:
         normalized_ndwi = self.__normalize__(ndwi)
         return normalized_ndwi
 
-    def srre(self, nir_image_name, red_e_image_name):
+    def srre(self, filename):
 
-        nir = self.__load_image_to_array__(nir_image_name)
-        red_e = self.__load_image_to_array__(red_e_image_name)
+        nir = self.image_loader.load(filename, ImageType.nir)
+        red_e = self.image_loader.load(filename, ImageType.red_edge)
 
         srre = nir / red_e
 
@@ -163,10 +164,10 @@ class Multispectral:
 
         return normalized_srre
 
-    def rtvi_core(self, nir_image_name, green_image_name):
+    def rtvi_core(self, filename):
 
-        nir = self.__load_image_to_array__(nir_image_name)
-        green = self.__load_image_to_array__(green_image_name)
+        nir = self.image_loader.load(filename, ImageType.nir)
+        green = self.image_loader.load(filename, ImageType.green)
 
         rtvi = np.where((green + nir) == 0, 0,
                         (green - nir) / (green + nir))

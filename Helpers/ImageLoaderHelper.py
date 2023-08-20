@@ -3,14 +3,14 @@ import rasterio
 from Enums.ImageTypeEnum import ImageType
 import logging
 
-from Modules.DirectoryManager.DirectoryManager import DirectoryManager
+from Modules.DirectoryManager import DirectoryManager
 
 
 class ImageLoaderHelper():
 
     def __init__(self):
         self.logger = logging.getLogger(__name__)
-        logging.getLogger("rasterio").setLevel(logging.WARNING)
+        logging.getLogger("rasterio").setLevel(logging.FATAL)
         self.directory_manager = DirectoryManager()
         self.__init_directories__()
 
