@@ -4,11 +4,8 @@ from Modules.Messaging.NewImageReceiver import NewImageReceiver
 from dto.IncomingMessageDTO import IncomingMessageDTO
 import logging
 import json
-import matplotlib.pyplot as plt
 from Exceptions.ImageDtoMapException import ImageDtoMapException
-from Modules.DirectoryManager import DirectoryManager
 from Enums.MultiSpectralEnum import MultiSpectralEnum
-import os
 
 
 class NewImageProcessor():

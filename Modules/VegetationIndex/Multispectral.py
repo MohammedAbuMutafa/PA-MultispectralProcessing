@@ -1,8 +1,6 @@
 import numpy as np
 from Helpers.ImageLoaderHelper import ImageLoaderHelper
 from Enums.ImageTypeEnum import ImageType
-from Enums.MultiSpectralEnum import MultiSpectralEnum
-
 
 class Multispectral:
 
