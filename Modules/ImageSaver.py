@@ -18,8 +18,8 @@ class ImageSaver():
         plt.imshow(img, cmap=('RdYlGn'))
         if (use_color_bar):
             plt.colorbar()
-        output_dir = self.directory_manager.processed_dir
+        output_dir = self.directory_manager.session_dir
         file = os.path.join(output_dir, processing_type.name,
                             image_details.fileName)
-        fig.savefig(file)
+        fig.savefig(file, bbox_inches='tight', pad_inches=0.0)
         plt.close(fig)

@@ -49,22 +49,13 @@ class DirectoryManager():
 
     def create_session_dirs(self):
         self.__create_main_dir__()
-        self.__create_processed_dir__()
-        self.__create_classified_dir__()
         self.__create_sub_dirs__()
-
-    def __create_classified_dir__(self):
-        classified = os.path.join(self.session_dir, "Classified")
-
-        if (os.path.exists(classified) == False):
-            self.classified_dir = classified
-            os.mkdir(classified)
 
     def __create_main_dir__(self):
         self.session_dir = os.getenv('SESSION_KEY')
         now = datetime.now()
-        date = now.strftime("%d%m%Y%H%M%S")
-        session_name = self.session_dir + date
+        date = now.strftime("%d_%m_%Y-%H_%M_%S")
+        session_name = self.session_dir + '-' + date
         self.session_dir = os.path.join(
             self.base_output_dir, session_name)
 
@@ -72,18 +63,6 @@ class DirectoryManager():
             os.mkdir(self.session_dir)
             self.logger.info(f"Creating output dir: {self.session_dir}")
 
-    def __create_processed_dir__(self):
-        processed = os.path.join(self.session_dir, "Processed")
-
-        if (os.path.exists(processed) == False):
-            self.processed_dir = processed
-            os.mkdir(processed)
-
     def __create_sub_dirs__(self):
-
         for dir in MultiSpectralEnum:
-            processed_path = os.path.join(self.processed_dir, dir.name)
-            os.mkdir(processed_path)
-
-            classified_path = os.path.join(self.classified_dir, dir.name)
-            os.mkdir(classified_path)
+            os.mkdir(os.path.join(self.session_dir, dir.name))
