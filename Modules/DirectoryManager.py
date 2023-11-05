@@ -65,4 +65,10 @@ class DirectoryManager():
 
     def __create_sub_dirs__(self):
         for dir in MultiSpectralEnum:
-            os.mkdir(os.path.join(self.session_dir, dir.name))
+            os.makedirs(os.path.join(self.session_dir, dir.name, "numpy"))
+            os.makedirs(os.path.join(
+                self.session_dir, dir.name, "images"))
+            debug_mode = os.getenv("DEBUG_MODE")
+            if (debug_mode == "TRUE"):
+                os.makedirs(os.path.join(
+                    self.session_dir, dir.name, "debug"))

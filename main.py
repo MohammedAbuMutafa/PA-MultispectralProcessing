@@ -31,7 +31,12 @@ def startup_splash():
 
     f = Figlet(font='slant')
     print(f.renderText('Processing Service'))
-    print(f"Version: {os.getenv('VERSION')}")
+    # TODO: Refactor in an options module
+    debug_mode = os.getenv("DEBUG_MODE")
+    if (debug_mode == "TRUE"):
+        print(f"Version: {os.getenv('VERSION')} DEBUG MODE")
+    else:
+        print(f"Version: {os.getenv('VERSION')}")
     print("-------------------------------------------------------")
 
 

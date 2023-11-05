@@ -23,9 +23,9 @@ class Multispectral:
                         0, (nir - red) /
                         (nir + red))
 
-        # normalized_ndvi = self.__normalize__(ndvi)
+        normalized_ndvi = self.__normalize__(ndvi)
 
-        return ndvi
+        return normalized_ndvi
 
     def gndvi(self, filename):
 
@@ -36,9 +36,9 @@ class Multispectral:
                          (nir - green) /
                          (nir + green))
 
-        # normalized_gndvi = self.__normalize__(gndvi)
+        normalized_gndvi = self.__normalize__(gndvi)
 
-        return gndvi
+        return normalized_gndvi
 
     def bai(self, filename):
 
@@ -48,9 +48,9 @@ class Multispectral:
         bai = 1 / ((np.power((0.1 - red), 2))
                    + np.power((0.06 - nir), 2))
 
-        # normalized_bai = self.__normalize__(bai)
+        normalized_bai = self.__normalize__(bai)
 
-        return bai
+        return normalized_bai
 
     def savi(self, filename, tuning_param_l=0.5):
 
@@ -72,8 +72,8 @@ class Multispectral:
 
         CIg = (nir / green) - 1
 
-        # normalized_cig = self.__normalize__(CIg)
-        return CIg
+        normalized_cig = self.__normalize__(CIg)
+        return normalized_cig
 
     def cire(self, filename):
 
@@ -82,8 +82,8 @@ class Multispectral:
 
         CIre = (nir / red_e) - 1
 
-        # normalized_cire = self.__normalize__(CIre)
-        return CIre
+        normalized_cire = self.__normalize__(CIre)
+        return normalized_cire
 
     def gemi(self, filename):
 
@@ -99,9 +99,9 @@ class Multispectral:
         gemi = (theta * (1 - 0.25 * theta) - ((red - 0.125)) /
                 (1-red))
 
-        # normalized_gemi = self.__normalize__(gemi)
+        normalized_gemi = self.__normalize__(gemi)
 
-        return gemi
+        return normalized_gemi
 
     def msavi2(self, filename):
 
@@ -112,8 +112,8 @@ class Multispectral:
                   - (np.sqrt(np.power((2*nir + 1), 2)))
                   - 8*(nir - red))
 
-        # normalized_msavi2 = self.__normalize__(msavi2)
-        return msavi2
+        normalized_msavi2 = self.__normalize__(msavi2)
+        return normalized_msavi2
 
     def mtvi2(self, filename):
 
@@ -125,9 +125,9 @@ class Multispectral:
                  np.sqrt(np.power((2 * nir + 1), 2) -
                          (6 * nir - 5 * np.sqrt(red)) - 0.5))
 
-        # normalized_mtvi2 = self.__normalize__(mtvi2)
+        normalized_mtvi2 = self.__normalize__(mtvi2)
 
-        return mtvi2
+        return normalized_mtvi2
 
     def ndre(self, filename):
 
@@ -137,9 +137,9 @@ class Multispectral:
         ndre = np.where((nir + red_e) == 0, 0,
                         (nir - red_e) / (nir + red_e))
 
-        # normalized_ndre = self.__normalize__(ndre)
+        normalized_ndre = self.__normalize__(ndre)
 
-        return ndre
+        return normalized_ndre
 
     def ndwi(self, filename):
 
@@ -149,8 +149,8 @@ class Multispectral:
         ndwi = np.where((green + nir) == 0, 0,
                         (green - nir) / (green + nir))
 
-        # normalized_ndwi = self.__normalize__(ndwi)
-        return ndwi
+        normalized_ndwi = self.__normalize__(ndwi)
+        return normalized_ndwi
 
     def srre(self, filename):
 
@@ -159,9 +159,9 @@ class Multispectral:
 
         srre = nir / red_e
 
-        # normalized_srre = self.__normalize__(srre)
+        normalized_srre = self.__normalize__(srre)
 
-        return srre
+        return normalized_srre
 
     def rtvi_core(self, filename):
 
@@ -171,6 +171,6 @@ class Multispectral:
         rtvi = np.where((green + nir) == 0, 0,
                         (green - nir) / (green + nir))
 
-        # normalized_rtvi = self.__normalize__(rtvi)
+        normalized_rtvi = self.__normalize__(rtvi)
 
-        return rtvi
+        return normalized_rtvi
