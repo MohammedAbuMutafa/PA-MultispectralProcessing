@@ -6,3 +6,4 @@ tifffile
 pika
 pyfiglet
 flask
+requests

@@ -18,7 +18,7 @@ class ImageSaver():
             self.save_debug_image(img, image_details, processing_type)
 
     def save_debug_image(self, img, image_details: IncomingMessageDTO, processing_type: MultiSpectralEnum):
-        fig = plt.figure(figsize=(7.50, 7.50), dpi=100)
+        fig = plt.figure(dpi=100)
         plt.imshow(img, cmap="gray")
         plt.colorbar()
         output_dir = self.directory_manager.session_dir
@@ -28,7 +28,7 @@ class ImageSaver():
         plt.close(fig)
 
     def save_image_as_jpg(self, img, image_details: IncomingMessageDTO, processing_type: MultiSpectralEnum):
-        fig = plt.figure(frameon=False, figsize=(7.50, 7.50), dpi=100)
+        fig = plt.figure(frameon=False, dpi=100)
         ax = plt.Axes(fig, [0., 0., 1., 1.])
         ax.set_axis_off()
         fig.add_axes(ax)

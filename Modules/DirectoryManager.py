@@ -2,6 +2,7 @@ import os
 import logging
 from datetime import datetime
 from Enums.MultiSpectralEnum import MultiSpectralEnum
+import requests
 
 
 class DirectoryManager():

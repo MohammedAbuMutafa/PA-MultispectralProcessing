@@ -25,7 +25,7 @@ class Multispectral:
 
         normalized_ndvi = self.__normalize__(ndvi)
 
-        return normalized_ndvi
+        return ndvi
 
     def gndvi(self, filename):
 
@@ -38,7 +38,7 @@ class Multispectral:
 
         normalized_gndvi = self.__normalize__(gndvi)
 
-        return normalized_gndvi
+        return gndvi
 
     def bai(self, filename):
 
@@ -150,7 +150,7 @@ class Multispectral:
                         (green - nir) / (green + nir))
 
         normalized_ndwi = self.__normalize__(ndwi)
-        return normalized_ndwi
+        return ndwi
 
     def srre(self, filename):
 
@@ -173,4 +173,4 @@ class Multispectral:
 
         normalized_rtvi = self.__normalize__(rtvi)
 
-        return normalized_rtvi
+        return rtvi
