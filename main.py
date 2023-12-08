@@ -61,5 +61,3 @@ if __name__ == '__main__':
         logging.error(f"Connection issue: {e}")
     except ImageDtoMapException as e:
         logging.error(f"Image dto issue: {e}")
-    except Exception as e:
-        logging.error(f"Unhandled exception: {e}")

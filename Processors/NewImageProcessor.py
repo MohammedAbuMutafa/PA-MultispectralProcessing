@@ -1,7 +1,9 @@
 from Modules.ImageSaver import ImageSaver
 from Modules.VegetationIndex.MultispectralFactory import MultispectralFactory
 from Modules.Messaging.NewImageReceiver import NewImageReceiver
+from Modules.Messaging.ProcessedImageSender import ProcessedImageSender
 from dto.IncomingMessageDTO import IncomingMessageDTO
+from dto.ProcessedImageDTO import ProcessedImageDTO
 from dto.UpdateImageRequest import UpdateImageRequest
 from dto.UpdateSessionPathRequest import UpdateSessionPathRequest
 import logging
@@ -20,6 +22,7 @@ class NewImageProcessor():
         self.headers = {'Content-type': 'application/json'}
         self.new_image_url = f"{os.getenv('API_BASE')}{os.getenv('NEW_IMAGE_ENDPOINT')}"
         self.sessions_url = f"{os.getenv('API_BASE')}{os.getenv('NEW_SESSION_ENDPOINT')}"
+        self.image_sender = ProcessedImageSender()
         self.image_saver = ImageSaver()
         self.multispectral = MultispectralFactory()
         self.message_receiver = NewImageReceiver(
@@ -59,13 +62,21 @@ class NewImageProcessor():
         self.process_message(message)
 
     def process_message(self, new_image: IncomingMessageDTO):
+        indices = []
         for multispectral_index in MultiSpectralEnum:
             self.__process_image__(new_image, multispectral_index)
+            indices.append(multispectral_index.name)
+
         update_image_request = UpdateImageRequest().toJSON()
         image_id = new_image.id.replace('"', '')
         url = f"{self.new_image_url}/{image_id}"
         response = requests.put(
             url, update_image_request, headers=self.headers)
+
+        processed_image = ProcessedImageDTO(fileName=new_image.fileName, id=new_image.id.replace('"', ''), session_id=new_image.session_id,
+                                            session_dir=self.image_saver.directory_manager.session_dir, indices=indices,)
+        self.image_sender.publish_new_image(processed_image)
+
         if (response.status_code != 200):
             raise Exception("Unable to update image state")
 
